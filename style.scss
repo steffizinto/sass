@@ -1,0 +1,161 @@
+$transition-duration: 0.8s;
+$transition-easing: cubic-bezier(0.230, 1.000, 0.320, 1.000);
+$bounce-easing: cubic-bezier(0.175, 0.885, 0.320, 1.275);
+$closed-width: 200px;
+$closed-height: 80px;
+$opened-width: 400px;
+$opened-height: 160px;
+
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,700);
+
+html, body {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	user-select: none;
+}
+
+body {
+	display: flex;
+	font-family: Roboto, "Helvetica Neue", sans-serif;
+	font-size: 18px;
+	perspective: 1000px;
+	background-color: #f5f5f5;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.description {
+	margin-top: 50px;
+	text-align: center;
+	color: #999;
+	transition: opacity 0.3s ease;
+}
+
+.description a {
+	color: #4A9DF6;
+	text-decoration: none;
+}
+
+.container.is-open ~ .description {
+	opacity: 0;
+}
+
+.container {
+	display: block;
+	position: relative;
+	width: $closed-width;
+	height: $closed-height;
+	transition: width $transition-duration $transition-easing,
+				height $transition-duration $transition-easing,
+				transform $transition-duration $bounce-easing;
+	transform-style: preserve-3d;
+	transform-origin: 50% 50%;
+	text-align: center;
+}
+
+.content {
+	position: absolute;
+	display: block;
+	width: 100%;
+	height: 100%;
+	line-height: $closed-height;
+	background-color: #F44336;
+	color: #fff;
+	cursor: pointer;
+	backface-visibility: hidden;
+	-webkit-tap-highlight-color: rgba( 0, 0, 0, 0 );
+	transition: background 0.15s ease,
+							line-height $transition-duration $transition-easing;
+
+	&:hover {
+		background-color: lighten(#F44336, 10%);
+	}
+}
+
+.confirmation {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: #eee;
+	color: #222;
+	transform: translateZ(-2px) rotateX(180deg);
+	overflow: hidden;
+	transition: box-shadow $transition-duration ease;
+
+	p {
+		margin-top: 27px;
+		margin-bottom: 25px;
+	}
+
+	button {
+		padding: 12px 20px;
+		width: 30%;
+		margin: 0 5px;
+		background-color: transparent;
+		border: 0;
+		border-radius: 2px;
+		font-size: 1em;
+		cursor: pointer;
+		-webkit-appearance: none;
+		-webkit-tap-highlight-color: rgba( 0, 0, 0, 0 );
+		transition: background 0.15s ease;
+	}
+
+	button:focus {
+		outline: 0;
+	}
+
+	button.confirmBtn {
+		background-color: #2196F3;
+		color: #fff;
+
+		&:hover {
+			background-color: lighten(#2196F3, 10%);
+		}
+	}
+
+	button.denyBtn {
+		color: #2196F3;
+
+		&:hover {
+			background-color: #ddd;
+		}
+	}
+}
+
+.container[data-direction="left"] .confirmation,
+.container[data-direction="right"] .confirmation {
+	transform: translateZ(-2px) rotateY(180deg);
+}
+
+.container.is-open {
+	width: $opened-width;
+	height: $opened-height;
+
+	.content {
+		pointer-events: none;
+		line-height: $opened-height;
+	}
+
+	.confirmation {
+		box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+	}
+}
+
+.container[data-direction="top"].is-open {
+	transform: rotateX(180deg);
+}
+
+.container[data-direction="right"].is-open {
+	transform: rotateY(180deg);
+}
+
+.container[data-direction="bottom"].is-open {
+	transform: rotateX(-180deg);
+}
+
+.container[data-direction="left"].is-open {
+	transform: rotateY(-180deg);
+}
